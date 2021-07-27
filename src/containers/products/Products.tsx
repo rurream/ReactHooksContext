@@ -1,20 +1,27 @@
 import { useState } from 'react'
-import Table from '../../components/table/Table';
-import Form from '../../components/form/Form';
+import Listar from '../../components/listar/Listar';
+import FormularioCreacion from '../../components/formularioCreacion/FormularioCreacion';
 import ProductContext from '../../contexts/ProductContext'
 
+// interface ProductModel{
+//     products: [],
+//     addProduct: (product: any) => {},
+//     getProduct: (id: any) => {},
+//     delProduct: (id: any) => {},
+// }
 interface ProductModel{
-    products: [],
-    addProduct: (product: any) => {},
-    getProduct: (id: any) => {},
-    delProduct: (id: any) => {},
+    id:number,
+    name: string,
+    price: number,
+    stock: number,
 }
 
 const Products = () => {
-    const [products, setProduct] = useState<any>([{
+    const [products, setProducts] = useState<any>([{
         id: 1,
         name: 'Platano',
         price: 500,
+        stock:21
     }])
 
     const addProduct = (newProduct:any) => {
@@ -22,31 +29,28 @@ const Products = () => {
         let aux = [...products];
         newProduct.id = id;
         aux.push(newProduct);
-        setProduct(aux);
+        setProducts(aux);
     }
 
-    const delProduct = (id: any) => {
-        console.log(`delete ${id}`);
-        let aux2 = [...products];
-        let aux = aux2.findIndex((item:any)=>{
-            console.log(item);
-            return item.id === id})
-        console.log(aux);
-        if(aux > -1){
-            
-            // let aux3 = aux2.splice(aux, 1)
-            console.log(aux2.splice(aux, 1));
-            console.log(aux2);
-        setProduct(aux2);
-        }else{
-            console.log("No encontrado");
-        }
-        
+    const delProduct = (id: number) => {
+
+        let aux = products.filter((item : ProductModel) =>{
+            return item.id !==id
+        })
+        setProducts(aux);
     }
 
-    const getProduct = (id:any) => {
+    const getProduct = (id:number) => {
         let aux = products.filter((item:any)=>{return item.id === id})
         return aux;
+    }
+
+    const updateProduct = (data:ProductModel)=>{
+        console.log(data);
+        let newProdcs = products.map((item :ProductModel )=>{
+            return item.id ===data.id? data: item
+        })
+        setProducts(newProdcs);
     }
 
     return (
@@ -55,10 +59,16 @@ const Products = () => {
             addProduct,
             delProduct,
             getProduct,
+            updateProduct
         }}>
-            <div className="col-12 col-sm-6 offset-sm-3 ">
-                <Form/>
-                <Table />
+            <div>
+                <div className="col-6 mx-auto mb-5 ">
+                <FormularioCreacion/>
+                </div>
+                <div className="col-12 px-5 ">
+                <Listar />
+                </div>
+                
             </div>
         </ProductContext.Provider>
     )
