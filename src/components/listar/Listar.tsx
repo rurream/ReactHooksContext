@@ -3,18 +3,19 @@ import ProductContext from "../../contexts/ProductContext"
 import Detalle from '../detalle/Detalle'
 import styles from './Listar.module.css';
 import { Modal, Button } from 'react-bootstrap'
+import { Link } from "react-router-dom";
 
 interface ProductModel {
     name: string,
     price: number,
     stock: number,
-    id:number
+    id: number
 }
 
 const Listar = () => {
     const context = useContext(ProductContext);
     const [showModal, setShowModal] = useState(false);
-    const [productDetail, setProductDetail] = useState({ name: '', price: 0, stock: 0, id:0 });
+    const [productDetail, setProductDetail] = useState({ name: '', price: 0, stock: 0, id: 0 });
 
     const showDetail = (productoMostrar: ProductModel) => {
         setProductDetail(productoMostrar);
@@ -34,6 +35,9 @@ const Listar = () => {
                             <td>Cantidad</td>
                             <td></td>
                             <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody >
@@ -45,11 +49,26 @@ const Listar = () => {
                                 <td>{product.price}</td>
                                 <td>{product.stock}</td>
                                 <td>
-                                    <Button className="btn btn-sm btn-danger py-0" onClick={() => context.delProduct(product.id)}>Remover</Button>
+                                    <Button className="btn btn-sm btn-danger py-0" onClick={() => context.handlerOnDelete(product.id)}>Remover</Button>
                                 </td>
                                 <td>
-                                        <Button className="btn btn-sm btn-warning py-0" onClick={() => { showDetail(product); handlerModal() }}>Detalle</Button>
-                                    </td>
+                                    <Button className="btn btn-sm btn-warning py-0" onClick={() => { showDetail(product); handlerModal() }}>Detalle</Button>
+                                </td>
+                                <td>
+                                    <Link to={`detail/${product.id}`} >
+                                        <Button className="btn btn-sm btn-info py-0" >go-Detail</Button>
+                                    </Link>
+                                </td>
+                                <td>
+                                    <Link to={`remove/${product.id}`} >
+                                        <Button className="btn btn-sm btn-info py-0" >go-Remove</Button>
+                                    </Link>
+                                </td>
+                                <td>
+                                    <Link to={`edit/${product.id}`} >
+                                        <Button className="btn btn-sm btn-info py-0" onClick={() => { showDetail(product); handlerModal() }}>go-Update</Button>
+                                    </Link>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -59,7 +78,8 @@ const Listar = () => {
             </div>
             <Modal show={showModal} onHide={() => handlerModal()}>
                 <Modal.Header closeButton>Detalle de Producto (#{productDetail.id})</Modal.Header>
-                <Modal.Body><Detalle name={productDetail.name} price={productDetail.price} stock={productDetail.stock} id={productDetail.id}/></Modal.Body>
+                <Modal.Body>
+                    <Detalle name={productDetail.name} price={productDetail.price} stock={productDetail.stock} id={productDetail.id} /></Modal.Body>
                 {/* handler={handlerModal} */}
                 <Modal.Footer>
                     <Button onClick={() => handlerModal()}>Ok</Button>

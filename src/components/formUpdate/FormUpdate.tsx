@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import useInput from "../../hooks/useInput";
-import ProducsContext from "../../contexts/ProductContext";
-
+import ProductContext from "../../contexts/ProductContext";
+import { useHistory} from 'react-router-dom';
 interface ProductModel{
     name: string,
     price: number,
@@ -10,11 +10,12 @@ interface ProductModel{
 }
 
 const FormUdpate = ({name, price, stock, id}: ProductModel) => {
-    // , handler:any
-    const { products, updateProduct } = useContext(ProducsContext);
+    
+    const { products, handlerOnUpdate } = useContext(ProductContext);
     const [nameFruit, setNameFruit] = useInput(name);
     const [cant, setCant] = useInput(stock + '');
     const [priceFruit, setPrice] = useInput(price + '');
+    const history = useHistory()
 
     const handlerSubmit = (event: any) => {
         event.preventDefault();
@@ -25,8 +26,8 @@ const FormUdpate = ({name, price, stock, id}: ProductModel) => {
             id:id
         }
        
-        updateProduct(aux);
-        
+        handlerOnUpdate(aux);
+        history.push('/list')
     }
 
     const disabled = () => {
@@ -42,7 +43,7 @@ const FormUdpate = ({name, price, stock, id}: ProductModel) => {
                 <input type="number" className="form-control py-0 mb-1" value={cant} onChange={setCant} />
                 <label className="small">Precio</label>
                 <input type="number" className="form-control py-0 mb-1" value={priceFruit} onChange={setPrice} />
-                <button className="btn btn-primary mt-2 px-5" disabled={disabled()}>Registrar nuevo producto</button>
+                <button className="btn btn-primary mt-2 px-5" disabled={disabled()}>Registrar modificación</button>
             </form>
         </div>
     )

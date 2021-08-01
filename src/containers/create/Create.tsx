@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import useInput from "../../hooks/useInput";
-import ProducsContext from "../../contexts/ProductContext";
-import styles from './FormularioCreacion.module.css';
+import ProductContext from "../../contexts/ProductContext";
+import styles from './Create.module.css';
 
-const Form = () => {
-    const { products, addProduct } = useContext(ProducsContext);
+const Create = () => {
+    const { products, handlerOnAdd } = useContext(ProductContext);
     const [nameFruit, setNameFruit] = useInput('');
     const [cant, setCant] = useInput('');
     const [price, setPrice] = useInput('');
@@ -22,12 +22,13 @@ const Form = () => {
 
         if(validarText(nameFruit) && validarNumber(cant) && validarNumber(price)){
             let aux = {
+                id: new Date().getTime(),
                 name: nameFruit,
                 stock: cant,
                 price: price,
             }
             
-            addProduct(aux);
+            handlerOnAdd(aux);
         }else{
             console.log("Error, los datos no son válidos");
         }
@@ -53,4 +54,4 @@ const Form = () => {
     )
 }
 
-export default Form
+export default Create
